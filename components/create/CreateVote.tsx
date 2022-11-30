@@ -16,7 +16,7 @@ const CreateVote = () => {
   const [endDate, setEndDate] = useState<Date | null>();
   return (
     <div className="my-10">
-      <h2 className="text-2xl font-semibold">Detai Voting</h2>
+      <h2 className="text-2xl font-semibold">Detail Voting</h2>
       <form>
         <div className="flex flex-col gap-1 mt-2">
           <label className="font-medium text-lg">Judul</label>
@@ -55,7 +55,7 @@ const CreateVote = () => {
         </div>
         <div className="mt-5">
           <h2 className="text-2xl font-semibold">Kandidat</h2>
-          <div className="grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-4">
             {candidates.map((candidate) => (
               <CandidateFrom key={candidate.key} candidate={candidate} />
             ))}

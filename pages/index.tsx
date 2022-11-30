@@ -19,7 +19,7 @@ const Home: NextPage = () => {
         </Link>
         <Link
           className=" px-4 py-3 border-black border rounded-md md:text-lg text-center"
-          href={'/join'}
+          href={'/participant'}
         >
           Ikutan Vote
         </Link>
