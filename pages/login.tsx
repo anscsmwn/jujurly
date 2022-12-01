@@ -23,15 +23,14 @@ export default function Login({ providers }: any) {
       </Link>
       {/* <h1 className="text-2xl font-bold">Login</h1> */}
       {Object.values(providers).map((provider: any) => (
-        <div key={provider.name} className="w-1/3">
-          <button
-            onClick={() => signIn(provider.id)}
-            className="inline-flex gap-3 justify-center items-center bg-white text-zinc-900 py-2 w-full border-2 border-zinc-900 font-medium hover:bg-zinc-900 hover:text-white"
-          >
-            {provider.name === 'Google' && <FcGoogle />}
-            Login Dengan {provider.name}
-          </button>
-        </div>
+        <button
+          key={provider.name}
+          onClick={() => signIn(provider.id)}
+          className="flex gap-3 justify-center items-center bg-white text-zinc-900 py-2 px-7 sm:px-16 border-2 border-zinc-900 font-medium hover:bg-zinc-900 hover:text-white w-fit"
+        >
+          {provider.name === 'Google' && <FcGoogle />}
+          Login Dengan {provider.name}
+        </button>
       ))}
     </div>
   );

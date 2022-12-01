@@ -9,7 +9,7 @@ const Home: NextPage = () => {
     <Layout>
       <Header />
       <Hero />
-      <div className="flex items-center gap-14 justify-center ">
+      <div className="flex items-center sm:gap-14 gap-5 justify-center ">
         <Link
           className="bg-black px-4 py-3 text-white rounded-md md:text-lg text-center"
           href={'/create'}
