@@ -2,10 +2,19 @@ import InputForm from 'components/create/InputForm';
 import Layout from 'components/Layout';
 import Image from 'next/image';
 import Link from 'next/link';
+import Unauthorized from 'components/Unauthorized';
+import { useSession } from 'next-auth/react';
 import React from 'react';
 
 const Participant = () => {
   const [code, setCode] = React.useState('');
+  const { status } = useSession();
+
+  if (status === 'loading') return <></>;
+  if (status === 'unauthenticated') {
+    return <Unauthorized />;
+  }
+
   return (
     <Layout>
       <div className="flex justify-center flex-col items-center mt-10 space-y-4">

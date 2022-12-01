@@ -1,10 +1,17 @@
 import CreateVote from 'components/create/CreateVote';
 import Header from 'components/Header';
 import Layout from 'components/Layout';
+import Unauthorized from 'components/Unauthorized';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import React from 'react';
 
-const create = () => {
+const Create = () => {
+  const { status } = useSession();
+  if (status === 'loading') return <></>;
+  if (status === 'unauthenticated') {
+    return <Unauthorized />;
+  }
   return (
     <Layout>
       <Header />
@@ -25,4 +32,4 @@ const create = () => {
   );
 };
 
-export default create;
+export default Create;

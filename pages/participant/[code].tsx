@@ -2,11 +2,19 @@ import Layout from 'components/Layout';
 import CandidateItem from 'components/participant/CandidateItem';
 import Countdown from 'components/participant/Countdown';
 import showModalConfirmation from 'components/participant/ModalConfirmation';
-
+import Unauthorized from 'components/Unauthorized';
+import { useSession } from 'next-auth/react';
 import React from 'react';
 
 const DetailParticipant = () => {
   const [selectedCandidate, setSelectedCandidate] = React.useState('');
+  const { status } = useSession();
+
+  if (status === 'loading') return <></>;
+  if (status === 'unauthenticated') {
+    return <Unauthorized />;
+  }
+
   const candidates = [
     {
       key: 1,
