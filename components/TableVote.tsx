@@ -1,14 +1,51 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from 'react';
 import { BiTrash } from 'react-icons/bi';
-import { AiOutlineLink } from 'react-icons/ai';
-import useVotes from 'lib/useVotes';
+import { AiOutlineLink, AiOutlineLoading3Quarters } from 'react-icons/ai';
+
 import { useSession } from 'next-auth/react';
 import { formattedDate } from 'lib/utils';
-const Table = () => {
+import showModalConfirmation from './participant/ModalConfirmation';
+import { useVoteStore } from '#/voteStore';
+const TableVote = () => {
   const { status } = useSession();
-  const { votes, isLoading } = useVotes();
-  if (status === 'loading') return <div>Loading...</div>;
-  if (isLoading) return <div>Loading...</div>;
+  const { votes, isLoading, fetchVote, deleteVote } = useVoteStore();
+  useEffect(() => {
+    fetchVote();
+  }, []);
+  if (status === 'loading' || isLoading)
+    return (
+      <div className="text-center font-semibold mt-7">
+        <AiOutlineLoading3Quarters className="animate-spin text-center inline-block" />
+      </div>
+    );
+
+  const handleDeleteVote = (code: string) => {
+    showModalConfirmation({
+      title: 'Kamu yakin?',
+      subtitle: 'Kamu akan menghapus vote ini',
+      positiveText: 'Ya, saya yakin',
+      negativeText: 'Tidak',
+      onPositiveClick: async () => {
+        const result = await fetch(`/api/vote/${code}`, {
+          method: 'DELETE',
+        });
+        if (result.status === 200) {
+          deleteVote(code);
+          showModalConfirmation({
+            title: 'Vote berhasil dihapus',
+            subtitle: 'Vote berhasil dihapus',
+          });
+        }
+        if (result.status !== 200) {
+          showModalConfirmation({
+            title: 'Vote gagal dihapus',
+            subtitle: 'Vote gagal dihapus',
+          });
+        }
+      },
+    });
+  };
   return (
     <div className="my-10 overflow-x-auto">
       <h3 className="font-bold text-2xl mb-5">Vote yang saya buat</h3>
@@ -69,7 +106,11 @@ const Table = () => {
                 <button>
                   <AiOutlineLink />
                 </button>
-                <button>
+                <button
+                  onClick={() => {
+                    handleDeleteVote(vote.code);
+                  }}
+                >
                   <BiTrash />
                 </button>
               </td>
@@ -81,4 +122,4 @@ const Table = () => {
   );
 };
 
-export default Table;
+export default TableVote;

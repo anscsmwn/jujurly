@@ -1,7 +1,7 @@
 import Header from 'components/Header';
 import Hero from 'components/Hero';
 import Layout from 'components/Layout';
-import Table from 'components/Table';
+import TableVote from 'components/TableVote';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 const Home: NextPage = () => {
@@ -23,7 +23,7 @@ const Home: NextPage = () => {
           Ikutan Vote
         </Link>
       </div>
-      <Table />
+      <TableVote />
     </Layout>
   );
 };

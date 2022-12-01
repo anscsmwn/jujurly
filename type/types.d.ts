@@ -17,6 +17,6 @@ export interface Votes {
   startDate: string;
   endDate: string;
   candidates: Candidate[];
-  createdAt: string;
   totalVotes: number;
+  createdAt: string;
 }
