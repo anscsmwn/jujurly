@@ -15,7 +15,9 @@ const Unauthorized = () => {
         height={300}
       />
       <h1 className="text-4xl font-bold">Login Dulu Yah!</h1>
-      <h2>Untuk mengakses halaman ini, kamu wajib login terlebih dahulu</h2>
+      <h2 className="mx-4 text-center sm:text-lg">
+        Untuk mengakses halaman ini, kamu wajib login terlebih dahulu
+      </h2>
       <button
         onClick={() => {
           signIn();
