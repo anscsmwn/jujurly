@@ -11,6 +11,7 @@ export default async function handler(
   }
 
   const { code } = req.query;
+
   // Get Vote by code
   if (req.method === 'GET') {
     const vote = await prisma.votes.findUnique({
@@ -43,6 +44,22 @@ export default async function handler(
       },
       data: {
         deleteAt: new Date().toString(),
+      },
+    });
+    return res.json(result);
+  }
+  // Update the Vote
+  if (req.method === 'PUT') {
+    const { title, candidates, startDate, endDate } = req.body;
+    const result = await prisma.votes.update({
+      where: {
+        code: code as string,
+      },
+      data: {
+        title,
+        candidates,
+        startDate,
+        endDate,
       },
     });
     return res.json(result);

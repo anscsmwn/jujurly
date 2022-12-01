@@ -74,7 +74,11 @@ const CreateVote = ({ isEdit }: CreateVoteProps) => {
     showModalConfirmation({
       isLoading: isLoadingSubmit,
       title: 'Kamu yakin?',
-      subtitle: `Kamu akan membuat vote dengan judul ${title}`,
+      subtitle: `${
+        isEdit
+          ? `Mengubah vote dengan judul ${title}`
+          : `Kamu akan membuat vote dengan judul ${title}`
+      }`,
       positiveText: 'Ya, saya yakin',
       negativeText: 'Tidak',
       onPositiveClick: async () => {
@@ -88,7 +92,7 @@ const CreateVote = ({ isEdit }: CreateVoteProps) => {
           code: generateCode(6),
         };
         if (isEdit) {
-          const result = await fetch(`/api/vote/${vote.code}`, {
+          const result = await fetch(`/api/vote/${code}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -116,6 +120,9 @@ const CreateVote = ({ isEdit }: CreateVoteProps) => {
             title: 'Vote Berhasil Dibuat',
             subtitle: `Kamu berhasil
             membuat vote dengan judul ${title}`,
+            onPositiveClick() {
+              router.push('/');
+            },
           });
         }
       },
@@ -176,7 +183,7 @@ const CreateVote = ({ isEdit }: CreateVoteProps) => {
           </div>
         </div>
         <button className="bg-black px-5 py-3 text-white rounded-md text-lg mt-5">
-          Buat Vote
+          {isEdit ? 'Ubah Vote' : 'Buat Vote'}
         </button>
       </form>
     </div>

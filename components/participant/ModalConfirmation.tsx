@@ -28,7 +28,9 @@ function ModalConfirmation(props: Props) {
         <div className="flex min-h-full justify-center text-center items-center">
           <div className="relative bg-white shadow-xl transition-all w-full py-6 max-w-md mx-5 rounded-md">
             <p className="text-2xl font-bold">{props.title || 'Title'}</p>
-            <p className="text-lg">{props.subtitle || 'Sub Title'}</p>
+            <p className="text-lg mx-2 text-center">
+              {props.subtitle || 'Sub Title'}
+            </p>
             <div className={`space-x-3 mt-5`}>
               <button
                 disabled={props.isLoading}
