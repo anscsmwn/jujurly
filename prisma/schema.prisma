@@ -21,6 +21,7 @@ model votes {
   startDate  DateTime    @db.Date
   endDate    DateTime    @db.Date
   publisher  String
+  code       String      @unique
   candidates Candidate[]
   createAt   DateTime    @default(now()) @db.Date
   deleteAt   String?

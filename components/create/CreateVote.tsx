@@ -11,6 +11,7 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import showModalConfirmation from 'components/participant/ModalConfirmation';
 import { useSession } from 'next-auth/react';
 import { Candidate } from 'type/types';
+import { generateCode } from 'lib/utils';
 
 const CreateVote = () => {
   const { data: session } = useSession();
@@ -27,6 +28,7 @@ const CreateVote = () => {
     endDate: Date;
     candidates: Candidate[];
     publisher: string | undefined | null;
+    code: string;
   };
 
   const createVote = (e: any) => {
@@ -63,6 +65,7 @@ const CreateVote = () => {
           endDate,
           candidates,
           publisher: session?.user?.email,
+          code: generateCode(6),
         };
         const result = await fetch('/api/vote ', {
           method: 'POST',

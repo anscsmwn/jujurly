@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { FcGoogle } from 'react-icons/fc';
 
 export default function Login({ providers }: any) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
 
   if (session) {
@@ -28,8 +28,14 @@ export default function Login({ providers }: any) {
           onClick={() => signIn(provider.id)}
           className="flex gap-3 justify-center items-center bg-white text-zinc-900 py-2 px-7 sm:px-16 border-2 border-zinc-900 font-medium hover:bg-zinc-900 hover:text-white w-fit"
         >
-          {provider.name === 'Google' && <FcGoogle />}
-          Login Dengan {provider.name}
+          {status === 'loading' ? (
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-zinc-900"></div>
+          ) : (
+            <>
+              {provider.name === 'Google' && <FcGoogle />}
+              Login Dengan {provider.name}
+            </>
+          )}
         </button>
       ))}
     </div>

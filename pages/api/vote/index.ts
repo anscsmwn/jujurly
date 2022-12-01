@@ -11,7 +11,7 @@ export default async function handle(
   }
   // Create vote in database
   if (req.method === 'POST') {
-    const { title, candidates, startDate, endDate } = req.body;
+    const { title, candidates, startDate, endDate, code } = req.body;
     const result = await prisma.votes.create({
       data: {
         title,
@@ -20,9 +20,23 @@ export default async function handle(
         startDate,
         endDate,
         deleteAt: null,
+        //@ts-ignore
+        code,
       },
     });
     return res.json(result);
+  }
+  if (req.method === 'GET') {
+    const result = await prisma.votes.findMany({
+      where: {
+        AND: [{ deleteAt: null }, { publisher: session?.user?.email! }],
+      },
+    });
+    const response = {
+      status: 200,
+      data: result,
+    };
+    return res.json(response);
   }
   return res.status(200).send('OK');
 }
