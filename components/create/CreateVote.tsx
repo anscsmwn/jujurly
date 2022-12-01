@@ -10,15 +10,24 @@ import { useCreateVoteStore } from '#/createVoteStore';
 import { AiOutlinePlus } from 'react-icons/ai';
 import showModalConfirmation from 'components/participant/ModalConfirmation';
 import { useSession } from 'next-auth/react';
+import { Candidate } from 'type/types';
 
 const CreateVote = () => {
   const { data: session } = useSession();
   const candidates = useCreateVoteStore((state) => state.candidates);
   const addCandidate = useCreateVoteStore((state) => state.addCandidate);
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState<string>('');
   const [startDate, setStartDate] = useState<Date | null>();
   const [endDate, setEndDate] = useState<Date | null>();
   const [isLoading, setIsLoading] = useState(false);
+
+  type Vote = {
+    title: string;
+    startDate: Date;
+    endDate: Date;
+    candidates: Candidate[];
+    publisher: string | undefined | null;
+  };
 
   const createVote = (e: any) => {
     e.preventDefault();
@@ -48,18 +57,19 @@ const CreateVote = () => {
       negativeText: 'Tidak',
       onPositiveClick: async () => {
         setIsLoading(true);
+        const vote: Vote = {
+          title,
+          startDate,
+          endDate,
+          candidates,
+          publisher: session?.user?.email,
+        };
         const result = await fetch('/api/vote ', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            title,
-            startDate,
-            endDate,
-            candidates,
-            publisher: session?.user?.email,
-          }),
+          body: JSON.stringify(vote),
         });
 
         if (result.status === 200) {
