@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 interface Props {
+  isLoading?: boolean;
   isOpen?: boolean;
   title?: string;
   subtitle?: string;
@@ -30,13 +31,20 @@ function ModalConfirmation(props: Props) {
             <p className="text-lg">{props.subtitle || 'Sub Title'}</p>
             <div className={`space-x-3 mt-5`}>
               <button
+                disabled={props.isLoading}
                 className={`bg-black px-4 py-3 text-white rounded-md md:text-lg`}
                 onClick={() => {
                   props.onPositiveClick && props.onPositiveClick();
                   setIsOpen(false);
                 }}
               >
-                {props.positiveText || 'Ya'}
+                <p>
+                  {props.isLoading ? (
+                    <AiOutlineLoading3Quarters className="animate-spin" />
+                  ) : (
+                    <>{props.positiveText || 'Ya'}</>
+                  )}
+                </p>
               </button>
               <button
                 className="px-4 py-3 border-black border rounded-md md:text-lg text-center"

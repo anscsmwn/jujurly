@@ -21,6 +21,7 @@ const InputForm = ({
       placeholder={placeHolder}
       value={value}
       onChange={(e) => onChange(e.target.value)}
+      required
     />
   );
 };

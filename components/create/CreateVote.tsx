@@ -8,23 +8,81 @@ import InputForm from './InputForm';
 import CandidateFrom from './CandidateFrom';
 import { useCreateVoteStore } from '#/createVoteStore';
 import { AiOutlinePlus } from 'react-icons/ai';
+import showModalConfirmation from 'components/participant/ModalConfirmation';
+import { useSession } from 'next-auth/react';
 
 const CreateVote = () => {
+  const { data: session } = useSession();
   const candidates = useCreateVoteStore((state) => state.candidates);
   const addCandidate = useCreateVoteStore((state) => state.addCandidate);
+  const [title, setTitle] = useState('');
   const [startDate, setStartDate] = useState<Date | null>();
   const [endDate, setEndDate] = useState<Date | null>();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const createVote = (e: any) => {
+    e.preventDefault();
+    if (!title) {
+      return showModalConfirmation({
+        title: 'Vote Gagal ❌',
+        subtitle: 'Judul vote tidak boleh kosong',
+      });
+    }
+    if (!startDate || !endDate) {
+      return showModalConfirmation({
+        title: 'Vote Gagal ❌',
+        subtitle: 'Tanggal vote tidak boleh kosong',
+      });
+    }
+    if (candidates.length < 2) {
+      return showModalConfirmation({
+        title: 'Vote Gagal ❌',
+        subtitle: 'Minimal ada 2 kandidat',
+      });
+    }
+    showModalConfirmation({
+      isLoading,
+      title: 'Kamu yakin?',
+      subtitle: `Kamu akan membuat vote dengan judul ${title}`,
+      positiveText: 'Ya, saya yakin',
+      negativeText: 'Tidak',
+      onPositiveClick: async () => {
+        setIsLoading(true);
+        const result = await fetch('/api/vote ', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            title,
+            startDate,
+            endDate,
+            candidates,
+            publisher: session?.user?.email,
+          }),
+        });
+
+        if (result.status === 200) {
+          showModalConfirmation({
+            title: 'Vote Berhasil Dibuat',
+            subtitle: `Kamu berhasil
+            membuat vote dengan judul ${title}`,
+          });
+        }
+      },
+    });
+  };
   return (
     <div className="my-10">
       <h2 className="text-2xl font-semibold">Detail Voting</h2>
-      <form>
+      <form onSubmit={createVote}>
         <div className="flex flex-col gap-1 mt-2">
           <label className="font-medium text-lg">Judul</label>
           <InputForm
             className="w-full max-w-md"
             placeHolder="Contoh : Voting Calon Gubernur"
-            onChange={() => {}}
-            value=""
+            onChange={setTitle}
+            value={title}
           />
         </div>
         <div className="mt-5">
@@ -68,6 +126,9 @@ const CreateVote = () => {
             </button>
           </div>
         </div>
+        <button className="bg-black px-5 py-3 text-white rounded-md text-lg mt-5">
+          Buat Vote
+        </button>
       </form>
     </div>
   );
