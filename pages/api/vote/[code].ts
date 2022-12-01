@@ -31,7 +31,7 @@ export default async function handler(
       },
     });
     const response = {
-      status: 200,
+      status: vote ? 200 : 404,
       data: vote,
     };
     return res.json(response);

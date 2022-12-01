@@ -119,7 +119,11 @@ const TableVote = () => {
                 >
                   <BiPencil />
                 </button>
-                <button>
+                <button
+                  onClick={() => {
+                    router.push(`/participant/${vote.code}`);
+                  }}
+                >
                   <AiOutlineLink />
                 </button>
                 <button

@@ -5,15 +5,42 @@ import Link from 'next/link';
 import Unauthorized from 'components/Unauthorized';
 import { useSession } from 'next-auth/react';
 import React from 'react';
+import showModalConfirmation from 'components/participant/ModalConfirmation';
+import { useRouter } from 'next/router';
 
 const Participant = () => {
   const [code, setCode] = React.useState('');
   const { status } = useSession();
-
+  const router = useRouter();
   if (status === 'loading') return <></>;
   if (status === 'unauthenticated') {
     return <Unauthorized />;
   }
+  const submit = async () => {
+    if (code === '')
+      return showModalConfirmation({
+        title: 'Join Vote Gagal ❌',
+        subtitle: 'Kode vote tidak boleh kosong',
+      });
+    const res = await (await fetch(`/api/vote/${code}`)).json();
+    if (res.status === 404) {
+      return showModalConfirmation({
+        title: 'Join Vote Gagal ❌',
+        subtitle: 'Kode vote tidak ditemukan',
+      });
+    }
+    if (res.status === 200) {
+      return showModalConfirmation({
+        title: 'Join Vote Berhasil ✅',
+        subtitle: 'Silahkan menekan tombol join vote',
+        positiveText: 'Join Vote',
+        negativeText: 'Batal',
+        onPositiveClick: () => {
+          router.push(`/participant/${code}`);
+        },
+      });
+    }
+  };
 
   return (
     <Layout>
@@ -38,12 +65,14 @@ const Participant = () => {
           placeHolder="Masukan Code Voting"
           className="w-full max-w-lg"
         />
-        <Link
-          href={`/participant/${code}`}
+        <button
+          onClick={() => {
+            submit();
+          }}
           className="bg-black px-10 py-3 text-white rounded-md text-lg"
         >
           Lanjutkan
-        </Link>
+        </button>
         <Link href="/">Kembali</Link>
       </div>
     </Layout>
