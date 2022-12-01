@@ -34,10 +34,10 @@ const CandidateItem = ({
           <div className="w-full bg-zinc-100 h-2 rounded-full">
             <div
               className="bg-black h-2 rounded-full"
-              style={{ width: `${percentage}%` }}
+              style={{ width: `${Math.round(percentage)}%` }}
             ></div>
           </div>
-          <p className="text-sm">{percentage}%</p>
+          <p className="text-sm">{Math.round(percentage)}%</p>
         </div>
       </div>
       <button
