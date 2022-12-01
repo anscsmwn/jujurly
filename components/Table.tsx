@@ -7,10 +7,8 @@ import { formattedDate } from 'lib/utils';
 const Table = () => {
   const { status } = useSession();
   const { votes, isLoading } = useVotes();
-  console.log(votes);
   if (status === 'loading') return <div>Loading...</div>;
   if (isLoading) return <div>Loading...</div>;
-  console.log(isLoading);
   return (
     <div className="my-10 overflow-x-auto">
       <h3 className="font-bold text-2xl mb-5">Vote yang saya buat</h3>
