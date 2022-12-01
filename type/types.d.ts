@@ -8,7 +8,6 @@ export interface Response<T> {
   status: number;
   data?: T;
 }
-
 export interface Votes {
   id: string;
   publisher: string;

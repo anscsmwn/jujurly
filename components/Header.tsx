@@ -1,12 +1,15 @@
 import React from 'react';
 import { useSession, signOut, signIn } from 'next-auth/react';
 import { MdOutlineWavingHand } from 'react-icons/md';
+import Link from 'next/link';
 const Header = () => {
   const { data: session } = useSession();
   return (
     <>
       <header className="flex items-center justify-between py-5">
-        <h1 className="font-bold text-4xl">Jujurly</h1>
+        <Link href={'/'} className="font-bold text-4xl">
+          Jujurly
+        </Link>
         <div className="flex gap-5 items-center">
           <p className="text-lg font-semibold hidden sm:block">
             {session?.user?.name}

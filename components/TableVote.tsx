@@ -1,13 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
-import { BiTrash } from 'react-icons/bi';
+import { BiPencil, BiTrash } from 'react-icons/bi';
 import { AiOutlineLink, AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 import { useSession } from 'next-auth/react';
 import { formattedDate } from 'lib/utils';
 import showModalConfirmation from './participant/ModalConfirmation';
 import { useVoteStore } from '#/voteStore';
+import { useRouter } from 'next/router';
 const TableVote = () => {
+  const router = useRouter();
   const { status } = useSession();
   const { votes, isLoading, fetchVote, deleteVote } = useVoteStore();
   useEffect(() => {
@@ -88,7 +90,14 @@ const TableVote = () => {
           {votes?.map((vote, index) => (
             <tr key={index}>
               <td className="p-5 text-left">{index + 1}.</td>
-              <td className="p-5 text-left">{vote.title}</td>
+              <td
+                className="p-5 text-left font-semibold cursor-pointer hover:underline"
+                onClick={() => {
+                  router.push(`/vote/${vote.code}`);
+                }}
+              >
+                {vote.title}
+              </td>
               <td className="p-5 text-left">
                 {vote.candidates.map((candidate, index) => (
                   <span key={index}>
@@ -103,6 +112,13 @@ const TableVote = () => {
               <td className="p-5 text-left">{formattedDate(vote.startDate)}</td>
               <td className="p-5 text-left">{formattedDate(vote.endDate)}</td>
               <td className="p-5 text-left">
+                <button
+                  onClick={() => {
+                    router.push(`/vote/${vote.code}`);
+                  }}
+                >
+                  <BiPencil />
+                </button>
                 <button>
                   <AiOutlineLink />
                 </button>

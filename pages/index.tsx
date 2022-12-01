@@ -12,7 +12,7 @@ const Home: NextPage = () => {
       <div className="flex items-center sm:gap-14 gap-5 justify-center ">
         <Link
           className="bg-black px-4 py-3 text-white rounded-md md:text-lg text-center"
-          href={'/create'}
+          href={'/vote/create'}
         >
           Buat Vote Baru
         </Link>

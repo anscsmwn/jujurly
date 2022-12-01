@@ -7,6 +7,7 @@ interface CreateVoteStore {
   addCandidate: () => void;
   removeCandidate: (key: number) => void;
   changeCandidate: (key: number, name: string) => void;
+  setCandidate: (candidates: Candidate[]) => void;
 }
 
 export const useCreateVoteStore = create<CreateVoteStore>()((set) => ({
@@ -42,5 +43,8 @@ export const useCreateVoteStore = create<CreateVoteStore>()((set) => ({
       });
       return { candidates: newCandidates };
     });
+  },
+  setCandidate: (candidates) => {
+    set({ candidates });
   },
 }));

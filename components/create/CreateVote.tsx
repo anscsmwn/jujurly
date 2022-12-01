@@ -12,15 +12,36 @@ import showModalConfirmation from 'components/participant/ModalConfirmation';
 import { useSession } from 'next-auth/react';
 import { Candidate } from 'type/types';
 import { generateCode } from 'lib/utils';
+import useVote from 'lib/useVote';
+import { useRouter } from 'next/router';
 
-const CreateVote = () => {
+interface CreateVoteProps {
+  isEdit?: boolean;
+}
+
+const CreateVote = ({ isEdit }: CreateVoteProps) => {
+  const router = useRouter();
+  const { code } = router.query;
   const { data: session } = useSession();
   const candidates = useCreateVoteStore((state) => state.candidates);
   const addCandidate = useCreateVoteStore((state) => state.addCandidate);
+  const setCandidate = useCreateVoteStore((state) => state.setCandidate);
   const [title, setTitle] = useState<string>('');
   const [startDate, setStartDate] = useState<Date | null>();
   const [endDate, setEndDate] = useState<Date | null>();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
+  const { vote } = useVote(code as string);
+
+  React.useEffect(() => {
+    if (vote) {
+      const { title, candidates, startDate, endDate } = vote;
+      setTitle(title);
+      setStartDate(new Date(startDate));
+      setEndDate(new Date(endDate));
+      setCandidate(candidates);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [vote]);
 
   type Vote = {
     title: string;
@@ -30,8 +51,7 @@ const CreateVote = () => {
     publisher: string | undefined | null;
     code: string;
   };
-
-  const createVote = (e: any) => {
+  const submitVote = (e: any) => {
     e.preventDefault();
     if (!title) {
       return showModalConfirmation({
@@ -52,13 +72,13 @@ const CreateVote = () => {
       });
     }
     showModalConfirmation({
-      isLoading,
+      isLoading: isLoadingSubmit,
       title: 'Kamu yakin?',
       subtitle: `Kamu akan membuat vote dengan judul ${title}`,
       positiveText: 'Ya, saya yakin',
       negativeText: 'Tidak',
       onPositiveClick: async () => {
-        setIsLoading(true);
+        setIsLoadingSubmit(true);
         const vote: Vote = {
           title,
           startDate,
@@ -67,6 +87,22 @@ const CreateVote = () => {
           publisher: session?.user?.email,
           code: generateCode(6),
         };
+        if (isEdit) {
+          const result = await fetch(`/api/vote/${vote.code}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(vote),
+          });
+          if (result.status === 200) {
+            showModalConfirmation({
+              title: 'Vote berhasil diubah',
+              subtitle: `Vote dengan judul ${title} berhasil diubah`,
+            });
+          }
+          return;
+        }
         const result = await fetch('/api/vote ', {
           method: 'POST',
           headers: {
@@ -88,11 +124,11 @@ const CreateVote = () => {
   return (
     <div className="my-10">
       <h2 className="text-2xl font-semibold">Detail Voting</h2>
-      <form onSubmit={createVote}>
+      <form onSubmit={submitVote}>
         <div className="flex flex-col gap-1 mt-2">
           <label className="font-medium text-lg">Judul</label>
           <InputForm
-            className="w-full max-w-md"
+            className="w-full lg:max-w-md"
             placeHolder="Contoh : Voting Calon Gubernur"
             onChange={setTitle}
             value={title}
@@ -108,7 +144,7 @@ const CreateVote = () => {
               onChange={(date: Date) => setStartDate(date)}
               dateFormat="Pp"
               locale="id"
-              className="bg-zinc-100 py-4 px-5 w-full max-w-md"
+              className="bg-zinc-100 py-4 px-5 w-full lg:max-w-md"
               placeholderText="Waktu Mulai"
             />
             <span className="font-semibold text-left">Sampai</span>
@@ -119,7 +155,7 @@ const CreateVote = () => {
               onChange={(date: Date) => setEndDate(date)}
               dateFormat="Pp"
               locale="id"
-              className="bg-zinc-100 py-4 px-5 w-full max-w-md"
+              className="bg-zinc-100 py-4 px-5 w-full lg:max-w-md"
               placeholderText="Waktu Selesai"
             />
           </div>
