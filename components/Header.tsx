@@ -25,10 +25,12 @@ const Header = () => {
           </button>
         </div>
       </header>
-      <div className="flex sm:hidden gap-4 items-center">
-        <p className="text-lg font-semibold ">Hi, {session?.user?.name}</p>
-        <MdOutlineWavingHand className="text-2xl  wave" />
-      </div>
+      {session && (
+        <div className="flex sm:hidden gap-4 items-center">
+          <p className="text-lg font-semibold ">Hi, {session?.user?.name}</p>
+          <MdOutlineWavingHand className="text-2xl  wave" />
+        </div>
+      )}
     </>
   );
 };
