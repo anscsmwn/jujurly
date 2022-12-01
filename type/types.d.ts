@@ -2,6 +2,8 @@ export type Candidate = {
   key: number;
   name: string;
   votes?: number;
+  totalVotes?: number;
+  percentage?: number;
 };
 
 export interface Response<T> {

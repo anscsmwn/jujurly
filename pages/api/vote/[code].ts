@@ -30,9 +30,38 @@ export default async function handler(
         code: code as string,
       },
     });
+    // Get Participants of the Vote
+    const participants = await prisma.participants.findMany({
+      select: {
+        candidate: true,
+        email: true,
+        participateAt: true,
+      },
+      where: {
+        code: code as string,
+      },
+    });
+
+    // Count Vote of each Candidate
+    const candidates = vote?.candidates.map((candidate) => {
+      const count = participants.filter(
+        (participant) => participant.candidate === candidate.name,
+      ).length;
+      return {
+        ...candidate,
+        votes: count,
+        totalVotes: participants.length,
+        percentage: (count / participants.length) * 100,
+      };
+    });
+
     const response = {
       status: vote ? 200 : 404,
-      data: vote,
+      data: {
+        ...vote,
+        totalVotes: participants.length,
+        candidates,
+      },
     };
     return res.json(response);
   }

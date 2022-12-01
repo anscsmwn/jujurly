@@ -1,18 +1,23 @@
 /* eslint-disable no-unused-vars */
+import { participants } from '@prisma/client';
 import React from 'react';
 import { AiOutlineCheck } from 'react-icons/ai';
 import { Candidate } from 'type/types';
 
 interface CandidateItemProps {
   selectedCandidate: string;
-  setSelectedCandidate: (value: string) => void;
   candidate: Candidate;
+  participant?: participants;
+  handleClick: () => void;
+  percentage: number;
 }
 
 const CandidateItem = ({
   selectedCandidate,
-  setSelectedCandidate,
   candidate,
+  handleClick,
+  participant,
+  percentage,
 }: CandidateItemProps) => {
   return (
     <article className="flex border border-zinc-100 sm:p-5 p-2 space-x-4 my-3 rounded-md lg:items-stretch items-start">
@@ -29,18 +34,17 @@ const CandidateItem = ({
           <div className="w-full bg-zinc-100 h-2 rounded-full">
             <div
               className="bg-black h-2 rounded-full"
-              style={{ width: '40%' }}
+              style={{ width: `${percentage}%` }}
             ></div>
           </div>
-          <p className="text-sm">40%</p>
+          <p className="text-sm">{percentage}%</p>
         </div>
       </div>
       <button
-        onClick={() => {
-          setSelectedCandidate(candidate.name);
-        }}
-        className={` ${
-          candidate.name === selectedCandidate
+        onClick={handleClick}
+        className={`${
+          candidate.name === selectedCandidate ||
+          participant?.candidate === candidate.name
             ? 'bg-green-600 text-white'
             : 'bg-zinc-100'
         }  sm:w-1/12 justify-center p-3 rounded-md items-center sm:flex`}
