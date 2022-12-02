@@ -10,8 +10,7 @@ A voting system where you can create your own and join others.
 2. Move to directory `cd jujurly`
 3. Install dependencies using `yarn install`.
 4. Prepare environment variables (`.env.local`), refer to [`.env.example`](./.env.example) file.
-5. Prepare data using `yarn prepare-data`.
-6. Run development server using `yarn dev`.
+5. Run development server using `yarn dev`.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
