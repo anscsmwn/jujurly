@@ -70,7 +70,7 @@ const DetailParticipant = () => {
     });
   };
   return (
-    <Layout>
+    <Layout title="Ikutan Voting">
       <div className="text-center mt-10">
         <h1 className="text-4xl font-bold">{vote?.title}</h1>
         {vote && <Countdown vote={vote} />}

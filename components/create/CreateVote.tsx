@@ -14,6 +14,7 @@ import { Candidate } from 'type/types';
 import { generateCode } from 'lib/utils';
 import useVote from 'lib/useVote';
 import { useRouter } from 'next/router';
+import { FiAlertTriangle } from 'react-icons/fi';
 
 interface CreateVoteProps {
   isEdit?: boolean;
@@ -31,9 +32,9 @@ const CreateVote = ({ isEdit }: CreateVoteProps) => {
   const [endDate, setEndDate] = useState<Date | null>();
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
   const { vote } = useVote(code as string);
-
+  const isPublisher = session?.user?.email === vote?.publisher;
   React.useEffect(() => {
-    if (vote) {
+    if (vote && isEdit) {
       const { title, candidates, startDate, endDate } = vote;
       setTitle(title);
       setStartDate(new Date(startDate));
@@ -42,7 +43,6 @@ const CreateVote = ({ isEdit }: CreateVoteProps) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vote]);
-
   type Vote = {
     title: string;
     startDate: Date;
@@ -104,6 +104,7 @@ const CreateVote = ({ isEdit }: CreateVoteProps) => {
               title: 'Vote berhasil diubah',
               subtitle: `Vote dengan judul ${title} berhasil diubah`,
             });
+            setCandidate([]);
           }
           return;
         }
@@ -124,10 +125,21 @@ const CreateVote = ({ isEdit }: CreateVoteProps) => {
               router.push('/');
             },
           });
+          setCandidate([]);
         }
       },
     });
   };
+  if (!isPublisher && isEdit) {
+    return (
+      <div className="mt-10 flex justify-center">
+        <div className="font-semibold flex gap-5 items-center justify-center bg-zinc-100 py-2 px-7 rounded-md">
+          <FiAlertTriangle />
+          <h1>Anda tidak memiliki akses untuk mengubah vote ini</h1>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="my-10">
       <h2 className="text-2xl font-semibold">Detail Voting</h2>

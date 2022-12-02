@@ -8,12 +8,11 @@ import React from 'react';
 
 const Create = () => {
   const { status } = useSession();
-  if (status === 'loading') return <></>;
   if (status === 'unauthenticated') {
     return <Unauthorized />;
   }
   return (
-    <Layout>
+    <Layout title="Buat Voting">
       <Header />
       <div className="mt-10">
         <Image

@@ -6,7 +6,7 @@ import type { NextPage } from 'next';
 import Link from 'next/link';
 const Home: NextPage = () => {
   return (
-    <Layout>
+    <Layout title="Home">
       <Header />
       <Hero />
       <div className="flex items-center sm:gap-14 gap-5 justify-center ">

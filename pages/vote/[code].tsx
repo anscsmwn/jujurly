@@ -13,7 +13,7 @@ const Detail = () => {
     return <Unauthorized />;
   }
   return (
-    <Layout>
+    <Layout title="Detail Voting">
       <Header />
       <div className="mt-10">
         <Image
