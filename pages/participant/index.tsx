@@ -43,7 +43,7 @@ const Participant = () => {
   };
 
   return (
-    <Layout>
+    <Layout title="Ikutan Voting">
       <div className="flex justify-center flex-col items-center mt-10 space-y-4">
         <div className="text-center">
           <Image

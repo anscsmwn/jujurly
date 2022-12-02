@@ -13,7 +13,9 @@ const TableVote = () => {
   const { status } = useSession();
   const { votes, isLoading, fetchVote, deleteVote } = useVoteStore();
   useEffect(() => {
-    fetchVote();
+    if (status === 'authenticated') {
+      fetchVote();
+    }
   }, []);
   if (status === 'loading' || isLoading)
     return (
@@ -77,7 +79,7 @@ const TableVote = () => {
               </td>
             </tr>
           )}
-          {votes?.length === 0 && (
+          {votes?.length === 0 && status !== 'unauthenticated' && (
             <tr>
               <td
                 colSpan={7}

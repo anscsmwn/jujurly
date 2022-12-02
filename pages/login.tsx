@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { getProviders, useSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { FcGoogle } from 'react-icons/fc';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 export default function Login({ providers }: any) {
   const { data: session, status } = useSession();
@@ -29,7 +30,7 @@ export default function Login({ providers }: any) {
           className="flex gap-3 justify-center items-center bg-white text-zinc-900 py-2 px-7 sm:px-16 border-2 border-zinc-900 font-medium hover:bg-zinc-900 hover:text-white w-fit"
         >
           {status === 'loading' ? (
-            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-zinc-900"></div>
+            <AiOutlineLoading3Quarters className="animate-spin text-center inline-block" />
           ) : (
             <>
               {provider.name === 'Google' && <FcGoogle />}
